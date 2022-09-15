@@ -68,9 +68,34 @@ if ($date != '') {
 $records = $stmt->fetch();
 $totalRecordwithFilter = $records['allcount'];
 
-## получить записи
-$stmt = $conn->pdo->prepare("SELECT * FROM pass_in_trip WHERE 1" . $date . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+## для графика
+$stmt = $conn->pdo->prepare("SELECT `date` AS `Дата`, COUNT(*) AS `Количество полётов` FROM pass_in_trip WHERE 1" . $date . $searchQuery . "GROUP BY `date` ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
 
+if ($date != '') {
+	$stmt->bindValue('firstDate', $firstDate, PDO::PARAM_STR);
+	$stmt->bindValue('lastDate', $lastDate, PDO::PARAM_STR);
+}
+foreach ($searchArray as $key => $search) {
+	$stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
+}
+$stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
+$stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
+$stmt->execute();
+
+$countPlane = $stmt->fetchAll();
+
+$chartData = array();
+
+foreach ($countPlane as $row) {
+	$chartData[] = array(
+		"date" => $row['Дата'],
+		"count" => $row['Количество полётов']
+	);
+}
+
+## получить записи для таблицы
+$stmt = $conn->pdo->prepare("SELECT * FROM pass_in_trip WHERE 1" . $date . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+//$stmt2 = $conn->pdo->query("SELECT `date` AS `Дата`, COUNT(*) AS `Количество полётов` FROM pass_in_trip GROUP BY `date`");
 
 //связать значения
 if ($date != '') {
@@ -88,10 +113,10 @@ $stmt->execute();
 
 $empRecords = $stmt->fetchAll();
 
-$data = array();
+$tableData = array();
 
 foreach ($empRecords as $row) {
-	$data[] = array(
+	$tableData[] = array(
 		"trip_no" => $row['trip_no'],
 		"date" => $row['date'],
 		"ID_psg" => $row['ID_psg'],
@@ -104,7 +129,8 @@ $response = array(
 	"draw" => (int)$draw,
 	"iTotalRecords" => $totalRecords,
 	"iTotalDisplayRecords" => $totalRecordwithFilter,
-	"aaData" => $data
+	"aaData" => $tableData,
+	"chartData" => $chartData
 );
 
 echo json_encode($response);
