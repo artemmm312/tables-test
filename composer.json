@@ -1,0 +1,17 @@
+{
+    "name": "artyom/test",
+    "autoload": {
+        "psr-4": {
+            "Connection\\": "Connection/",
+            "Models\\": "Models/"
+        }
+    },
+    "authors": [
+        {
+            "name": "artyom"
+        }
+    ],
+    "require": {
+        "ext-json": "*"
+    }
+}
