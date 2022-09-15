@@ -17,6 +17,8 @@ $searchValue = $_POST['search']['value']; //значение глобально�
 
 $firstDate = '';
 $lastDate = '';
+$date = '';
+
 if (isset($_POST['first_date']) && isset($_POST['last_date'])) {
 	$firstDate = $_POST['first_date'];
 	$lastDate = $_POST['last_date'];
@@ -29,7 +31,7 @@ $searchArray = array();
 $searchQuery = " ";
 if ($searchValue !== '') {
 	$searchQuery = " AND trip_no LIKE :trip_no OR
-        date LIKE :date OR
+        `date` LIKE :date OR
         ID_psg LIKE :ID_psg OR
         place LIKE :place ";
 	$searchArray = array(
@@ -42,30 +44,40 @@ if ($searchValue !== '') {
 
 ## общее количество записей без фильтрации
 if ($firstDate != '' && $lastDate != '') {
-	$date = " AND `date` BETWEEN " . $firstDate . " AND " .  $lastDate . '"';
-	$stmt = $conn->pdo->prepare("SELECT COUNT(*) AS allcount FROM pass_in_trip" . $date);
+	$firstDate = date("Y-m-d H:i:s", strtotime($firstDate));
+	$lastDate = date("Y-m-d H:i:s", strtotime($lastDate));
+	$dateArray = array('firstDate' => $firstDate, 'lastDate' => $lastDate);
+	$date = " AND `date` BETWEEN :firstDate AND :lastDate";
+	$stmt = $conn->pdo->prepare("SELECT COUNT(*) AS allcount FROM pass_in_trip WHERE 1" . $date);
+	$stmt->execute($dateArray);
 } else {
 	$stmt = $conn->pdo->prepare("SELECT COUNT(*) AS allcount FROM pass_in_trip");
+	$stmt->execute();
 }
-$stmt->execute();
 $records = $stmt->fetch();
 $totalRecords = $records['allcount'];
 
+
 ## общее количество записей с фильтрацией
-if ($firstDate != '' && $lastDate != '') {
-	$date = " AND date BETWEEN " . $firstDate . " AND " .  $lastDate;
-	$stmt = $conn->pdo->prepare("SELECT COUNT(*) AS allcount FROM pass_in_trip WHERE 1" . $searchQuery . $date);
+$stmt = $conn->pdo->prepare("SELECT COUNT(*) AS allcount FROM pass_in_trip WHERE 1" . $date . $searchQuery);
+if ($date != '') {
+	$stmt->execute(array_merge($dateArray, $searchArray));
 } else {
-	$stmt = $conn->pdo->prepare("SELECT COUNT(*) AS allcount FROM pass_in_trip WHERE 1" . $searchQuery);
+	$stmt->execute($searchArray);
 }
-$stmt->execute($searchArray);
 $records = $stmt->fetch();
 $totalRecordwithFilter = $records['allcount'];
 
 ## получить записи
-$stmt = $conn->pdo->prepare("SELECT * FROM pass_in_trip WHERE  1" . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+$stmt = $conn->pdo->prepare("SELECT * FROM pass_in_trip WHERE 1" . $date . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+
 
 //связать значения
+if ($date != '') {
+	$stmt->bindValue('firstDate', $firstDate, PDO::PARAM_STR);
+	$stmt->bindValue('lastDate', $lastDate, PDO::PARAM_STR);
+}
+
 foreach ($searchArray as $key => $search) {
 	$stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
 }
@@ -73,6 +85,7 @@ foreach ($searchArray as $key => $search) {
 $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
 $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
 $stmt->execute();
+
 $empRecords = $stmt->fetchAll();
 
 $data = array();

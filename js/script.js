@@ -8,10 +8,10 @@ $('#Date').submit(function (e) {
 	last_date = $("#last_date").val();
 	if (first_date != '' && last_date != '') {
 		data = { "first_date": first_date, "last_date": last_date };
-		$('#table_id').DataTable().destroy();
+		$('#table_id').DataTable().clear();
 		table(first_date, last_date);
 	} else {
-		$('#table_id').DataTable().destroy();
+		$('#table_id').DataTable().clear();
 		table();
 	}
 });
@@ -20,7 +20,7 @@ $(document).ready(function () {
 	table();
 });
 
-function table(first_data = '', last_date = '') {
+function table(first_date = '', last_date = '') {
 	$('#table_id').DataTable({
 		"language": {
 			"url": "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json"
