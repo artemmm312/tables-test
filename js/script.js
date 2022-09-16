@@ -1,6 +1,6 @@
 var first_date;
 var last_date;
-var data;
+var flightChart;
 
 $('#Date').submit(function (e) {
 	e.preventDefault();
@@ -9,9 +9,11 @@ $('#Date').submit(function (e) {
 	if (first_date != '' && last_date != '') {
 		data = { "first_date": first_date, "last_date": last_date };
 		$('#table_id').DataTable().clear();
+		//$("#myChart").destroy();
 		table(first_date, last_date);
 	} else {
 		$('#table_id').DataTable().clear();
+		//$("#myChart").destroy();
 		table();
 	}
 });
@@ -26,43 +28,60 @@ function table(first_date = '', last_date = '') {
 		'serverMethod': 'post',
 		'ajax': {
 			'url': 'SelectPsg.php', //источник данных ajax для таблицы
-			'data': { 'first_date': first_date, 'last_date': last_date }
+			'data': { 'first_date': first_date, 'last_date': last_date },
 		},
 		'columns': [
 			{ data: 'trip_no', title: 'Номер рейса' },
 			{ data: 'date', title: 'Дата' },
 			{ data: 'ID_psg', title: 'ID пассажира' },
 			{ data: 'place', title: 'Место' }
-		]
+		],
+		"drawCallback": function (settings) {  //построение графика
+			let charDate = settings.json.chartData;
+			console.log(charDate);
+			let flightDate = [];
+			let flightCount = [];
+
+			for (let key in charDate) {
+				flightDate.push(key);
+				flightCount.push(charDate[key]);
+			}
+
+
+			if (flightChart) {
+				flightChart.destroy();
+			}
+
+			flightChart = new Chart($("#myChart"), {
+				type: 'line',
+				data: {
+					labels: flightDate,
+					datasets: [{
+						label: 'График количество рейсов на дату',
+						data: flightCount,
+						backgroundColor: [
+							'rgba(255, 99, 132, 0.6)',
+							'rgba(54, 162, 235, 0.6)',
+							'rgba(255, 206, 86, 0.6)',
+							'rgba(75, 192, 192, 0.6)',
+							'rgba(153, 102, 255, 0.6)',
+							'rgba(255, 159, 64, 0.6)',
+							'rgba(255, 99, 132, 0.6)',
+							'rgba(54, 162, 235, 0.6)',
+							'rgba(255, 206, 86, 0.6)',
+							'rgba(75, 192, 192, 0.6)',
+							'rgba(153, 102, 255, 0.6)'
+						]
+					}]
+				}
+			});
+		}
 	})
 }
 
+
 $(document).ready(function () {
 	table();
-	var myChart = $("#myChart");
-	var lineChart = new Chart(myChart, {
-		type: 'line',
-		data: {
-			labels: ["China", "India", "United States", "Indonesia", "Brazil", "Pakistan", "Nigeria", "Bangladesh", "Russia", "Japan"],
-			datasets: [{
-				label: 'График количество рейсов на дату',
-				data: [1379302771, 1281935911, 326625791, 260580739, 207353391, 204924861, 190632261, 157826578, 142257519, 126451398],
-				backgroundColor: [
-					'rgba(255, 99, 132, 0.6)',
-					'rgba(54, 162, 235, 0.6)',
-					'rgba(255, 206, 86, 0.6)',
-					'rgba(75, 192, 192, 0.6)',
-					'rgba(153, 102, 255, 0.6)',
-					'rgba(255, 159, 64, 0.6)',
-					'rgba(255, 99, 132, 0.6)',
-					'rgba(54, 162, 235, 0.6)',
-					'rgba(255, 206, 86, 0.6)',
-					'rgba(75, 192, 192, 0.6)',
-					'rgba(153, 102, 255, 0.6)'
-				]
-			}]
-		}
-	});
 });
 
 

@@ -69,7 +69,8 @@ $records = $stmt->fetch();
 $totalRecordwithFilter = $records['allcount'];
 
 ## для графика
-$stmt = $conn->pdo->prepare("SELECT `date` AS `Дата`, COUNT(*) AS `Количество полётов` FROM pass_in_trip WHERE 1" . $date . $searchQuery . "GROUP BY `date` ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+/* $stmt = $conn->pdo->prepare("SELECT `date` AS `Дата`, COUNT(`date`) AS `Количество полётов` FROM pass_in_trip 
+	WHERE 1" . $date . $searchQuery . "GROUP BY `date` ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit, :offset");
 
 if ($date != '') {
 	$stmt->bindValue('firstDate', $firstDate, PDO::PARAM_STR);
@@ -86,16 +87,15 @@ $countPlane = $stmt->fetchAll();
 
 $chartData = array();
 
-foreach ($countPlane as $row) {
+foreach ($countPlane as $xyi) {
 	$chartData[] = array(
-		"date" => $row['Дата'],
-		"count" => $row['Количество полётов']
+		"date" => $xyi['Дата'],
+		"count" => $xyi['Количество полётов']
 	);
-}
+} */
 
 ## получить записи для таблицы
 $stmt = $conn->pdo->prepare("SELECT * FROM pass_in_trip WHERE 1" . $date . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
-//$stmt2 = $conn->pdo->query("SELECT `date` AS `Дата`, COUNT(*) AS `Количество полётов` FROM pass_in_trip GROUP BY `date`");
 
 //связать значения
 if ($date != '') {
@@ -113,16 +113,25 @@ $stmt->execute();
 
 $empRecords = $stmt->fetchAll();
 
+//данные для таблицы
 $tableData = array();
-
-foreach ($empRecords as $row) {
+foreach ($empRecords as $xyi) {
 	$tableData[] = array(
-		"trip_no" => $row['trip_no'],
-		"date" => $row['date'],
-		"ID_psg" => $row['ID_psg'],
-		"place" => $row['place']
+		"trip_no" => $xyi['trip_no'],
+		"date" => date("d.m.Y", strtotime($xyi['date'])),
+		"ID_psg" => $xyi['ID_psg'],
+		"place" => $xyi['place']
 	);
 }
+
+//данные для графика
+$arrayDate = array();
+foreach ($empRecords as $xyi) {
+	$arrayDate[] = date("d.m.Y", strtotime($xyi['date']));
+}
+sort($arrayDate);
+$chartData = array_count_values($arrayDate);
+
 
 ## ответ
 $response = array(
