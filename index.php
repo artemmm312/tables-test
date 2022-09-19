@@ -14,7 +14,7 @@
 </head>
 
 <body>
-  <div>
+  <div class="container">
     <form id="Date" method="post">
       <label>Введите начальную дату:</label><br />
       <input type="date" id="first_date" name="first_date"><br>
@@ -23,9 +23,13 @@
       <input type="submit" name="done" id="done" value="Показать"><br>
     </form>
   </div>
-  <table id="table_id" class="display dataTable">
-  </table>
-  <canvas id="myChart"></canvas>
+  <div class="container">
+    <table id="myTable" class="display dataTable">
+    </table>
+  </div>
+  <div class="container">
+    <canvas id="myChart"></canvas>
+  </div>
   <script type="text/javascript" src="js/script.js"></script>
   <!--<script type="text/javascript" src="js/test.js"></script>-->
 </body>

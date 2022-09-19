@@ -68,32 +68,6 @@ if ($date != '') {
 $records = $stmt->fetch();
 $totalRecordwithFilter = $records['allcount'];
 
-## для графика
-/* $stmt = $conn->pdo->prepare("SELECT `date` AS `Дата`, COUNT(`date`) AS `Количество полётов` FROM pass_in_trip 
-	WHERE 1" . $date . $searchQuery . "GROUP BY `date` ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit, :offset");
-
-if ($date != '') {
-	$stmt->bindValue('firstDate', $firstDate, PDO::PARAM_STR);
-	$stmt->bindValue('lastDate', $lastDate, PDO::PARAM_STR);
-}
-foreach ($searchArray as $key => $search) {
-	$stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
-}
-$stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
-$stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
-$stmt->execute();
-
-$countPlane = $stmt->fetchAll();
-
-$chartData = array();
-
-foreach ($countPlane as $xyi) {
-	$chartData[] = array(
-		"date" => $xyi['Дата'],
-		"count" => $xyi['Количество полётов']
-	);
-} */
-
 ## получить записи для таблицы
 $stmt = $conn->pdo->prepare("SELECT * FROM pass_in_trip WHERE 1" . $date . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
 
@@ -126,10 +100,15 @@ foreach ($empRecords as $xyi) {
 
 //данные для графика
 $arrayDate = array();
-foreach ($empRecords as $xyi) {
-	$arrayDate[] = date("d.m.Y", strtotime($xyi['date']));
+foreach ($empRecords as $xyi2) {
+	$arrayDate[] = date("d.m.Y", strtotime($xyi2['date']));
 }
-sort($arrayDate);
+//sort($arrayDate);
+function date_sort($a, $b)
+{
+	return strtotime($a) - strtotime($b);
+}
+usort($arrayDate, "date_sort");
 $chartData = array_count_values($arrayDate);
 
 
