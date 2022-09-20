@@ -3,12 +3,19 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <link rel="stylesheet" type="text/css" href="js/DataTables/datatables.min.css">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"
+    integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/1.2.1/chartjs-plugin-zoom.min.js"
+    integrity="sha512-klQv6lz2YR+MecyFYMFRuU2eAl8IPRo6zHnsc9n142TJuJHS8CG0ix4Oq9na9ceeg1u5EkBfZsFcV3U7J51iew=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script type=" text/javascript" src="js/jquery-3.6.1.min.js"></script>
   <script type="text/javascript" src="js/DataTables/datatables.min.js"></script>
 </head>
@@ -29,6 +36,9 @@
   </div>
   <div class="container">
     <canvas id="myChart"></canvas>
+  </div>
+  <div class="container">
+    <canvas id="testChart"></canvas>
   </div>
   <script type="text/javascript" src="js/script.js"></script>
   <!--<script type="text/javascript" src="js/test.js"></script>-->

@@ -112,13 +112,18 @@ usort($arrayDate, "date_sort");
 $chartData = array_count_values($arrayDate);
 
 
+$stm2 = $stmt = $conn->pdo->query("SELECT trip_no, COUNT(*) AS `sum` FROM pass_in_trip GROUP BY trip_no");
+$testDate = $stm2->fetchAll();
+
+
 ## ответ
 $response = array(
 	"draw" => (int)$draw,
 	"iTotalRecords" => $totalRecords,
 	"iTotalDisplayRecords" => $totalRecordwithFilter,
 	"aaData" => $tableData,
-	"chartData" => $chartData
+	"chartData" => $chartData,
+	"testData" => $testDate
 );
 
 echo json_encode($response);

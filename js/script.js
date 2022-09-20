@@ -1,6 +1,7 @@
 var first_date;
 var last_date;
 var flightChart;
+var testChart;
 
 $('#Date').submit(function (e) {
 	e.preventDefault();
@@ -20,6 +21,8 @@ $('#Date').submit(function (e) {
 		table_and_chart();
 	}
 });
+
+
 
 function table_and_chart(first_date = '', last_date = '') {
 	$('#myTable').DataTable({
@@ -41,12 +44,13 @@ function table_and_chart(first_date = '', last_date = '') {
 		],
 		"drawCallback": function (settings) {  //построение графика
 			let charDate = settings.json.chartData;
-			console.log(charDate);
+			//console.log(charDate);
 			let flightDate = [];
 			let flightCount = [];
 
 			for (let key in charDate) {
 				flightDate.push(key);
+				//console.log(flightDate);
 				flightCount.push(charDate[key]);
 			}
 
@@ -78,6 +82,16 @@ function table_and_chart(first_date = '', last_date = '') {
 				},
 				options: {
 					//responsive: false,
+					scales: {
+						yAxes: {
+							beginAtZero: true, // назначили оси Y начинать отсчет с нуля
+							min: 0,
+							max: 5,
+							ticks: {
+								stepSize: 1,
+							}
+						}
+					},
 					legend: {
 						display: true,
 						position: 'top',
@@ -110,40 +124,98 @@ function table_and_chart(first_date = '', last_date = '') {
 					} */
 				},
 				plugins: [],
-				/* data: {
-					labels: flightDate,
-					datasets: [{
-						label: 'График количества рейсов в дату на текущей странице',
-						data: flightCount,
-						backgroundColor: [
-							'rgba(3, 28, 252, 0.6)',
-							'rgba(54, 162, 235, 0.6)',
-							'rgba(255, 206, 86, 0.6)',
-							'rgba(75, 192, 192, 0.6)',
-							'rgba(153, 102, 255, 0.6)',
-							'rgba(255, 159, 64, 0.6)',
-							'rgba(255, 99, 132, 0.6)',
-							'rgba(54, 162, 235, 0.6)',
-							'rgba(255, 206, 86, 0.6)',
-							'rgba(75, 192, 192, 0.6)',
-							'rgba(153, 102, 255, 0.6)'
-						],
-						borderColor: [
-							'rgba(252, 3, 190, 0.6)',
-							'rgba(58, 226, 17, 0.412)'
-						],
-						color: [
-							'#07cef1',
-						]
-					}]
-				} */
 			});
+
+
+			let testDate = settings.json.testData;
+			//console.log(testDate);
+			let xDate = [];
+			let yDate = [];
+
+			for (let i = 0; i < testDate.length; i++) {
+				for (let key in testDate[i]) {
+					yDate.push(testDate[i].sum);
+					//console.log(xDate);
+					xDate.push(testDate[i].trip_no);
+					//console.log(yDate);
+				}
+			}
+
+
+
+			if (testChart) {
+				testChart.destroy();
+			}
+
+			testChart = new Chart($("#testChart"), {
+				type: 'line',
+				data: {
+					labels: xDate, //ось x
+					datasets: [{
+						label: 'Количества рейсов в дату на текущей странице', // название для определенного графика в виде строки
+						data: yDate, //ось y данные в виде массива с числами, количество должно совпадать с количеством меток по оси X
+						borderColor: 'rgba(255, 206, 86, 0.35)', //цвет линии
+						borderWidth: 5, // назначаем ширину линий
+						fill: true,  //заливка под линией
+						backgroundColor: 'rgba(102, 219, 255, 0.6)', //цвет заливки под линией
+						cubicInterpolationMode: 'monotone' // сглаживание углов
+
+					}],
+				},
+				options: {
+					scales: {
+						xAxes: {
+							//offset: true,
+							title: {
+								display: true,
+								text: "Номер рейса",
+								color: 'rgba(228, 24, 24, 0.75)',
+								min: 0,
+								max: 5,
+							},
+							ticks: {
+								//autoSkip: false,
+								//maxRotation: 7,
+								//maxTicksLimit: 7,
+								//count: 7,
+								//sampleSize: 7,
+								//max: 5,
+								//bounds: 5,
+								//stacked: true,
+								/* major: {
+									enabled: true,
+								} */
+							},
+							backdropColor: 'rgba(238, 5, 5, 0.75)',
+						},
+						yAxes: {
+							beginAtZero: true // назначили оси Y начинать отсчет с нуля
+						}
+					},
+					plugins: {
+						zoom: {
+							pan: {
+								enabled: true,
+								mode: 'x',
+							},
+							limits: {
+								xAxes: { min: 0, max: 5 },
+							},
+
+						},
+					},
+					plugins: [],
+				}
+			});
+			//testChart.register(zoomPlugin);
 		}
 	})
 }
 
+
 let color;
 $(document).ready(function () {
+	//testChart.register(zoomPlugin);
 	table_and_chart();
 });
 
