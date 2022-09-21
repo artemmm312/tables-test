@@ -133,15 +133,16 @@ function table_and_chart(first_date = '', last_date = '') {
 			let yDate = [];
 
 			for (let i = 0; i < testDate.length; i++) {
-				for (let key in testDate[i]) {
-					yDate.push(testDate[i].sum);
-					//console.log(xDate);
-					xDate.push(testDate[i].trip_no);
-					//console.log(yDate);
-				}
+
+				yDate.push(testDate[i].sum);
+				//console.log(xDate);
+				xDate.push(testDate[i].trip_no);
+				//console.log(yDate);
+
 			}
 
-
+			console.log(xDate);
+			console.log(yDate);
 
 			if (testChart) {
 				testChart.destroy();
@@ -170,9 +171,9 @@ function table_and_chart(first_date = '', last_date = '') {
 								display: true,
 								text: "Номер рейса",
 								color: 'rgba(228, 24, 24, 0.75)',
-								min: 0,
-								max: 5,
 							},
+							min: 0,
+							max: 8,
 							ticks: {
 								//autoSkip: false,
 								//maxRotation: 7,
@@ -189,7 +190,12 @@ function table_and_chart(first_date = '', last_date = '') {
 							backdropColor: 'rgba(238, 5, 5, 0.75)',
 						},
 						yAxes: {
-							beginAtZero: true // назначили оси Y начинать отсчет с нуля
+							beginAtZero: true, // назначили оси Y начинать отсчет с нуля
+							min: 0,
+							max: 7,
+							ticks: {
+								stepSize: 1,
+							}
 						}
 					},
 					plugins: {
@@ -198,16 +204,16 @@ function table_and_chart(first_date = '', last_date = '') {
 								enabled: true,
 								mode: 'x',
 							},
-							limits: {
+							/* limits: {
 								xAxes: { min: 0, max: 5 },
-							},
+							}, */
 
 						},
 					},
-					plugins: [],
-				}
+				},
+				//plugins: [],
 			});
-			//testChart.register(zoomPlugin);
+			//Chart.register(zoomPlugin);
 		}
 	})
 }
@@ -215,7 +221,6 @@ function table_and_chart(first_date = '', last_date = '') {
 
 let color;
 $(document).ready(function () {
-	//testChart.register(zoomPlugin);
 	table_and_chart();
 });
 

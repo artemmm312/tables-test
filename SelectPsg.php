@@ -112,8 +112,11 @@ usort($arrayDate, "date_sort");
 $chartData = array_count_values($arrayDate);
 
 
-$stm2 = $stmt = $conn->pdo->query("SELECT trip_no, COUNT(*) AS `sum` FROM pass_in_trip GROUP BY trip_no");
+$stm2 = $stmt = $conn->pdo->query("SELECT trip_no, COUNT(DISTINCT `date`) AS `sum` FROM pass_in_trip  GROUP BY trip_no");
+
 $testDate = $stm2->fetchAll();
+//var_dump($testDate);
+//echo $testDate;
 
 
 ## ответ
