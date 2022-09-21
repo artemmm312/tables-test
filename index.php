@@ -37,11 +37,11 @@
   <div class="container">
     <canvas id="myChart"></canvas>
   </div>
-  <div class="container">
-    <canvas id="testChart"></canvas>
+  <div class="container testChar" style="height: 600px; width: 100%">
+    <canvas id="testChart" style="max-height: 600px; max-width: 1200px"></canvas>
   </div>
   <script type="text/javascript" src="js/script.js"></script>
-  <!--<script type="text/javascript" src="js/test.js"></script>-->
+  <script type="text/javascript" src="js/charts.js"></script>
 </body>
 
 </html>

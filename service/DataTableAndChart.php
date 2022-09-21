@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use Connection\Connection;
 
@@ -111,22 +111,13 @@ function date_sort($a, $b)
 usort($arrayDate, "date_sort");
 $chartData = array_count_values($arrayDate);
 
-
-$stm2 = $stmt = $conn->pdo->query("SELECT trip_no, COUNT(DISTINCT `date`) AS `sum` FROM pass_in_trip  GROUP BY trip_no");
-
-$testDate = $stm2->fetchAll();
-//var_dump($testDate);
-//echo $testDate;
-
-
 ## ответ
 $response = array(
 	"draw" => (int)$draw,
 	"iTotalRecords" => $totalRecords,
 	"iTotalDisplayRecords" => $totalRecordwithFilter,
 	"aaData" => $tableData,
-	"chartData" => $chartData,
-	"testData" => $testDate
+	"chartData" => $chartData
 );
 
 echo json_encode($response);

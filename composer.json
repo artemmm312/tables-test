@@ -2,8 +2,7 @@
     "name": "artyom/test",
     "autoload": {
         "psr-4": {
-            "Connection\\": "Connection/",
-            "Models\\": "Models/"
+            "Connection\\": "Connection/"
         }
     },
     "authors": [
