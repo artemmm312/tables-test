@@ -2,6 +2,7 @@
 
 namespace Connection;
 
+use Exception;
 use PDO;
 
 class Connection

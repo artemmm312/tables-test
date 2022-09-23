@@ -1,0 +1,46 @@
+.container {
+    max-width: 1290px;
+    padding: 0 10px;
+    margin: 0 auto;
+}
+
+.variableDate {
+    display: flex;
+    align-items: center;
+    padding: 20px 20px 20px 0;
+}
+
+.fromDate {
+    padding: 10px;
+}
+
+.toDate {
+    padding: 10px 20px 10px 10px;
+}
+
+.chekDate {
+    padding: 10px;
+    border-radius: 10px;
+    width: 200px;
+    height: 50px;
+    border-color: rgb(189, 189, 189);
+    //color: aliceblue;
+    
+}
+
+.charts {
+    display: flex;
+    justify-content: space-between;
+    min-height: 500px;
+    padding-top: 100px;
+}
+
+.chart1 {
+    width: 100%;
+    padding-right: 30px;
+}
+
+.chart2 {
+    width: 100%;
+}
+

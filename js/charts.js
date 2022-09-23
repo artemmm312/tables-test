@@ -1,4 +1,5 @@
 var testChart;
+var testChart2;
 
 $(document).ready(function () {
   $.ajax({
@@ -32,8 +33,8 @@ $(document).ready(function () {
         testChart.destroy();
       }
 
-      testChart = new Chart($("#testChart"), {
-        type: 'line',
+      testChart = new Chart($("#testChart1"), {
+        type: 'bar',
         data: {
           labels: xData, //ось x
           datasets: [
@@ -99,7 +100,6 @@ $(document).ready(function () {
                   enabled: true,
                 } */
               },
-              backdropColor: 'rgba(238, 5, 5, 0.75)',
             },
             yAxes: {
               beginAtZero: true, // назначили оси Y начинать отсчет с нуля
@@ -132,6 +132,73 @@ $(document).ready(function () {
         },
         plugins: [],
       });
+
+      let dataChart2 = Data.testData3;
+      let xData3 = [];
+      let yData3 = [];
+      for (let i = 0; i < dataChart2.length; i++) {
+        yData3.push(dataChart2[i].sum);
+        xData3.push('Место ' + dataChart2[i].place);
+      }
+
+      if (testChart2) {
+        testChart2.destroy();
+      }
+
+      testChart2 = new Chart($("#testChart2"), {
+        type: 'pie',
+        data: {
+          labels: xData3,
+          datasets: [{
+            data: yData3,
+            backgroundColor: [
+              'rgba(250, 40, 40, 1)',
+              'rgba(250, 108, 64, 1)',
+              'rgba(252, 179, 71, 1)',
+              'rgba(247, 214, 71, 1)',
+              'rgba(206, 252, 79, 1)',
+              'rgba(161, 255, 99, 1)',
+              'rgba(99, 255, 146, 1)',
+              'rgba(99, 255, 177, 1)',
+              'rgba(99, 255, 242, 1)',
+              'rgba(99, 206, 255, 1)',
+              'rgba(31, 133, 250, 1)',
+              'rgba(49, 69, 250, 1)',
+              'rgba(109, 49, 250, 1)',
+              'rgba(153, 49, 250, 1)',
+              'rgba(203, 49, 250, 1)',
+              'rgba(250, 49, 233, 1)',
+              'rgba(250, 49, 149, 1)',
+            ],
+            borderColor: '#424242',
+            borderWidth: 1,
+            hoverOffset: 50,
+            borderAlign: 'center',
+            radius: '90%', //максимальны радиус
+            //offset: 100,
+          }]
+        },
+        options: {
+          animation: {
+            animateScale: true,
+          },
+          plugins: {
+            legend: {
+              position: 'left',
+              onHover: '',
+            },
+            title: {
+              display: true,
+              text: 'Диаграмма частоты покупки определенных мест в рейсах:',
+              padding: {
+                top: 50,
+                bottom: -800
+              }
+            }
+          }
+        }
+      });
+      //testChart2.options.plugins.legend.onHover.animateScale;
     },
   })
 })

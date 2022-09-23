@@ -6,17 +6,15 @@ $('#Date').submit(function (e) {
 	e.preventDefault();
 	first_date = $("#first_date").val();
 	last_date = $("#last_date").val();
-	console.log(first_date);
-	console.log(last_date);
-	console.log(flightChart);
+	//console.log(first_date);
+	//console.log(last_date);
+	//console.log(flightChart);
 	if (first_date != '' && last_date != '') {
 		data = { "first_date": first_date, "last_date": last_date };
 		$('#myTable').DataTable().destroy();
-		//$("#myChart").destroy();
 		table_and_chart(first_date, last_date);
 	} else {
 		$('#myTable').DataTable().destroy();
-		//$("#myChart").destroy();
 		table_and_chart();
 	}
 });
@@ -94,38 +92,6 @@ function table_and_chart(first_date = '', last_date = '') {
 	})
 }
 
-
-let color;
 $(document).ready(function () {
 	table_and_chart();
 });
-
-
-
-
-
-
-
-
-
-
-
-
-/* $(document).ready(function () {
-	$('#Date').submit(function (e) {
-		e.preventDefault();
-		let first_date = document.querySelector('input[name="first_date"]').value;
-		let last_date = document.querySelector('input[name="last_date"]').value;
-		let text = $("#text").val();
-		console.log(first_date);
-		$.ajax({
-			type: 'POST',
-			url: 'test.php',
-			data: { "first_date": first_date, "last_date": last_date, "text": text },
-			contentType: 'application/json;charset=utf-8',
-			success: function (result) {
-				alert(result);
-			},
-		});
-	});
-}); */
